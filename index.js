@@ -4,18 +4,44 @@ import cors from "cors";
 // import doctorsData from "./fixHealth.doctors.json";
 import db from "./config/mongoose.js";
 import { Doctor } from "./model/doctorsModel.js";
+import { Appointment } from "./model/appointmentModel.js";
 
 const app = express();
 dotenv.config();
 const PORT = process.env.PORT || 8000;
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   next();
+});
+
+app.get("/api/appointments", async (req, res) => {
+  try {
+    const data = await Appointment.find({});
+    return res.json(data);
+  } catch (error) {
+    throw new Error(error.message);
+  }
+});
+
+app.post("/api/appointments", async (req, res) => {
+  console.log(req.body);
+
+  const appointment = new Appointment(req.body);
+  try {
+    const savedAppointment = await appointment.save();
+    res.status(201).json(savedAppointment);
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 app.get("/api/doctors", async (req, res) => {
