@@ -126,12 +126,13 @@ app.post("/api/bookings", async function (req, res) {
 
 app.get("/api/bookings", async (req, res) => {
   try {
-    const bookings = await Booking.find({})
-      .populate("appointment")
-      .exec((err, bookings) => console.log(bookings));
+    const bookings = await Booking.find().populate("appointment");
+
+    console.log(bookings);
     res.json(bookings);
   } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" });
+    console.log(error.message);
+    res.status(500).json({ error: error.message });
   }
 });
 

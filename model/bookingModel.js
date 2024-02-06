@@ -5,7 +5,11 @@ const bookingSchema = new mongoose.Schema(
     patientName: String,
     phone: String,
     email: String,
-    appointment: { type: mongoose.Schema.Types.ObjectId, ref: "Appointment" },
+    appointment: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Appointment",
+      required: true,
+    },
   },
   { timestamps: true }
 );
