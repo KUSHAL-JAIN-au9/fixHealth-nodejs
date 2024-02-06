@@ -5,6 +5,7 @@ import cors from "cors";
 import db from "./config/mongoose.js";
 import { Doctor } from "./model/doctorsModel.js";
 import { Appointment } from "./model/appointmentModel.js";
+import { Booking } from "./model/bookingModel.js";
 
 const app = express();
 dotenv.config();
@@ -109,6 +110,27 @@ app.get("/api/doctors/:id", async (req, res) => {
   } catch (error) {
     // Handle errors (e.g., database error)
     console.error("Error:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.post("/api/bookings", async function (req, res) {
+  const bookingData = req.body;
+  try {
+    const newBooking = await Booking.create(bookingData);
+    res.status(201).json(newBooking);
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.get("/api/bookings", async (req, res) => {
+  try {
+    const bookings = await Booking.find({})
+      .populate("appointment")
+      .exec((err, bookings) => console.log(bookings));
+    res.json(bookings);
+  } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
