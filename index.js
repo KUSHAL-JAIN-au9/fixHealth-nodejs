@@ -44,6 +44,43 @@ app.post("/api/appointments", async (req, res) => {
   }
 });
 
+//update appointments
+app.put("/api/appointments/:id", async (req, res) => {
+  console.log(req.body);
+  const appointmentId = req.params.id;
+  const updatedData = req.body;
+
+  try {
+    const updatedAppointment = await Appointment.findByIdAndUpdate(
+      appointmentId,
+      updatedData,
+      { new: true }
+    );
+    res.status(200).json(updatedAppointment);
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+//delete appointments
+app.delete("/api/appointments/:id", async (req, res) => {
+  const appointmentId = req.params.id;
+
+  try {
+    const deletedAppointment = await Appointment.findByIdAndDelete(
+      appointmentId
+    );
+
+    if (!deletedAppointment) {
+      return res.status(404).json({ error: "Appointment not found" });
+    }
+
+    res.status(200).json({ message: "Appointment deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 app.get("/api/doctors", async (req, res) => {
   try {
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -80,7 +117,5 @@ app.listen(PORT, async (err) => {
   if (err) {
     console.log("Server is not running!!");
   }
-
-  //   console.log(db.collections);
   console.log(`Server is listening on ${PORT}`);
 });
