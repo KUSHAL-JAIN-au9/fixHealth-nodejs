@@ -9,6 +9,7 @@ const appointmentSchema = new mongoose.Schema(
     specialties: String,
     city: String,
     slots: Array,
+    week:String,
     isAllocated: {
       type: Boolean,
       default: false,
