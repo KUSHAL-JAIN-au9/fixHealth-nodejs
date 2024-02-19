@@ -5,6 +5,7 @@ const bookingSchema = new mongoose.Schema(
     patientName: String,
     phone: String,
     email: String,
+    date: String,
     appointment: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Appointment",
