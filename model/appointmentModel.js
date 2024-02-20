@@ -15,6 +15,10 @@ const appointmentSchema = new mongoose.Schema(
       default: false,
       timestamps: true,
     },
+    remarks: {
+      type: String,
+      default: "",
+    },
   },
   { timestamps: true }
 );
